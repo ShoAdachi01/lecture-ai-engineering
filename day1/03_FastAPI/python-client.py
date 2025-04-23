@@ -28,6 +28,26 @@ class LLMClient:
         response = self.session.get(f"{self.api_url}/health")
         return response.json()
     
+    def get_model_name(self):
+        """
+        Get the configured model name from the API
+        
+        Returns:
+            dict: API response containing the model name
+        """
+        response = self.session.get(f"{self.api_url}/model")
+        return response.json()
+    
+    def get_fortune(self):
+        """
+        Get a random fortune from the API
+
+        Returns:
+            dict: API response containing the fortune message
+        """
+        response = self.session.get(f"{self.api_url}/fortune")
+        return response.json()
+    
     def generate(self, prompt, max_new_tokens=512, temperature=0.7, top_p=0.9, do_sample=True):
         """
         テキスト生成
@@ -75,6 +95,18 @@ if __name__ == "__main__":
     # ヘルスチェック
     print("Health check:")
     print(client.health_check())
+    print()
+
+    # Get model name
+    print("Get model name:")
+    model_info = client.get_model_name()
+    print(f"Model served by API: {model_info.get('model_name', 'N/A')}")
+    print()
+
+    # Get a fortune
+    print("Your fortune for today:")
+    fortune_info = client.get_fortune()
+    print(f">>> {fortune_info.get('fortune', 'Could not fetch fortune.')}")
     print()
     
     # 単一の質問

@@ -10,6 +10,7 @@ from typing import Optional, List, Dict, Any
 import uvicorn
 import nest_asyncio
 from pyngrok import ngrok
+import random  # Import random module
 
 # --- 設定 ---
 # モデル名を設定
@@ -153,6 +154,31 @@ async def health_check():
         return {"status": "error", "message": "No model loaded"}
 
     return {"status": "ok", "model": config.MODEL_NAME}
+
+@app.get("/model")
+async def get_model_name():
+    """Return the currently configured model name"""
+    return {"model_name": config.MODEL_NAME}
+
+@app.get("/fortune")
+async def get_fortune():
+    """Return a random fortune cookie message"""
+    fortune = random.choice(fortune_messages)
+    return {"fortune": fortune}
+
+# --- Fortune Cookie Messages ---
+fortune_messages = [
+    "Your creativity will shine today.",
+    "A pleasant surprise awaits you.",
+    "Good things come to those who wait, but better things come to those who code.",
+    "You will find joy in unexpected places (like debugging!).",
+    "An exciting opportunity lies ahead.",
+    "The cloud is not just for storage; it's for dreams.",
+    "Patience is a virtue, especially during model training.",
+    "Your code will run flawlessly... eventually.",
+    "Ask not what your API can do for you, ask what you can do for your API.",
+    "A clean codebase is a happy codebase."
+]
 
 # 簡略化されたエンドポイント
 @app.post("/generate", response_model=GenerationResponse)
